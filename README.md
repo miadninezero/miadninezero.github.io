@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="dark h-screen min-h-screen">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,6 +34,13 @@
         }
     </script>
     <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
         @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap');
         .terminal-text {
             text-shadow: 0 0 5px rgba(0, 255, 0, 0.7);
@@ -75,10 +82,10 @@
         }
     </style>
 </head>
-<body class="bg-terminal-bg text-terminal-green font-mono h-screen overflow-hidden flex flex-col">
-    <div id="vanta-globe" class="absolute inset-0 pointer-events-none opacity-20"></div>
+<body class="bg-terminal-bg text-terminal-green font-mono h-screen min-h-screen w-screen overflow-hidden flex flex-col">
+    <div id="vanta-globe" class="fixed inset-0 pointer-events-none opacity-20"></div>
     
-    <div class="relative z-10 container mx-auto px-2 sm:px-4 py-4 sm:py-8 flex flex-col h-full">
+    <div class="relative z-10 w-full h-full px-2 sm:px-4 py-4 sm:py-8 flex flex-col">
         <!-- Header -->
         <div class="flex items-center justify-between mb-4 sm:mb-6 border-b border-terminal-line pb-3 sm:pb-4">
             <div class="flex items-center space-x-2 sm:space-x-3">
@@ -153,13 +160,20 @@
             mouseControls: true,
             touchControls: true,
             gyroControls: false,
-            minHeight: 200.00,
-            minWidth: 200.00,
+            minHeight: window.innerHeight,
+            minWidth: window.innerWidth,
             scale: 1.00,
             scaleMobile: 1.00,
             color: 0x00ff00,
             backgroundColor: 0x0a0a0a,
-            size: 0.7
+            size: 1.0
+        });
+
+        // Update Vanta.js size on window resize
+        window.addEventListener('resize', () => {
+            if (window.VANTA) {
+                window.VANTA.resize();
+            }
         });
 
         // Terminal functionality
