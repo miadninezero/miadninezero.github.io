@@ -64,13 +64,34 @@
             .terminal-scroll {
                 -webkit-overflow-scrolling: touch;
                 scroll-behavior: smooth;
+                padding-bottom: 80px; /* Extra padding for keyboard */
+                -webkit-tap-highlight-color: transparent; /* Remove tap highlight */
             }
             .glow-effect {
                 box-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
             }
             .command-response p {
                 line-height: 1.6;
-                margin-bottom: 0.5rem;
+                margin-bottom: 0.75rem;
+                font-size: 14px;
+            }
+            .terminal-input {
+                font-size: 16px !important; /* Prevent zoom on iOS */
+                padding: 8px 0;
+            }
+            #cursor {
+                height: 20px;
+            }
+            button {
+                min-width: 44px; /* Larger touch target */
+                min-height: 44px; /* Larger touch target */
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                -webkit-tap-highlight-color: transparent;
+            }
+            .grid {
+                gap: 0.75rem; /* Larger gaps for touch targets */
             }
         }
         /* Improve command response spacing */
@@ -85,22 +106,22 @@
 <body class="bg-terminal-bg text-terminal-green font-mono h-screen min-h-screen w-screen overflow-hidden flex flex-col">
     <div id="vanta-globe" class="fixed inset-0 pointer-events-none opacity-20"></div>
     
-    <div class="relative z-10 w-full h-full px-2 sm:px-4 py-4 sm:py-8 flex flex-col">
+    <div class="relative z-10 w-full h-full px-3 sm:px-4 py-3 sm:py-8 flex flex-col">
         <!-- Header -->
-        <div class="flex items-center justify-between mb-4 sm:mb-6 border-b border-terminal-line pb-3 sm:pb-4">
+        <div class="flex items-center justify-between mb-3 sm:mb-6 border-b border-terminal-line pb-2 sm:pb-4">
             <div class="flex items-center space-x-2 sm:space-x-3">
-                <i data-feather="terminal" class="text-terminal-green w-4 sm:w-5"></i>
-                <h1 class="text-lg sm:text-xl terminal-text">root@dev-terminal:~</h1>
+                <i data-feather="terminal" class="text-terminal-green w-5"></i>
+                <h1 class="text-base sm:text-xl terminal-text truncate">root@dev-terminal:~</h1>
             </div>
             <div class="flex space-x-3 sm:space-x-4">
-                <button class="hover:text-white transition-colors">
-                    <i data-feather="minimize"></i>
+                <button class="hover:text-white transition-colors p-2">
+                    <i data-feather="minimize" class="w-4 sm:w-5"></i>
                 </button>
-                <button class="hover:text-white transition-colors">
-                    <i data-feather="maximize"></i>
+                <button class="hover:text-white transition-colors p-2">
+                    <i data-feather="maximize" class="w-4 sm:w-5"></i>
                 </button>
-                <button class="hover:text-red-500 transition-colors">
-                    <i data-feather="x"></i>
+                <button class="hover:text-red-500 transition-colors p-2">
+                    <i data-feather="x" class="w-4 sm:w-5"></i>
                 </button>
             </div>
         </div>
@@ -130,7 +151,7 @@
         </div>
 
         <!-- Footer -->
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between text-xs sm:text-sm text-gray-500 border-t border-terminal-line pt-3 space-y-2 sm:space-y-0">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between text-xs sm:text-sm text-gray-500 border-t border-terminal-line pt-2 sm:pt-3 space-y-2 sm:space-y-0 pb-safe">
             <div class="flex items-center space-x-2">
                 <i data-feather="cpu" class="w-3 sm:w-4 h-3 sm:h-4"></i>
                 <span>System: Online</span>
@@ -207,18 +228,18 @@
                 response: `<div class="space-y-2 px-1">
                     <p class="text-sm sm:text-base">Technical Skills:</p>
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mt-2">
-                        <span class="bg-terminal-line px-3 py-1 rounded glow-effect hover:bg-gray-800 transition">JavaScript</span>
-                        <span class="bg-terminal-line px-3 py-1 rounded glow-effect hover:bg-gray-800 transition">HTML/CSS</span>
-                        <span class="bg-terminal-line px-3 py-1 rounded glow-effect hover:bg-gray-800 transition">React</span>
-                        <span class="bg-terminal-line px-3 py-1 rounded glow-effect hover:bg-gray-800 transition">Node.js</span>
-                        <span class="bg-terminal-line px-3 py-1 rounded glow-effect hover:bg-gray-800 transition">Python</span>
-                        <span class="bg-terminal-line px-3 py-1 rounded glow-effect hover:bg-gray-800 transition">SQL</span>
+                        <span class="bg-terminal-line px-3 py-2 sm:py-1 rounded glow-effect hover:bg-gray-800 transition text-center">JavaScript</span>
+                        <span class="bg-terminal-line px-3 py-2 sm:py-1 rounded glow-effect hover:bg-gray-800 transition text-center">HTML/CSS</span>
+                        <span class="bg-terminal-line px-3 py-2 sm:py-1 rounded glow-effect hover:bg-gray-800 transition text-center">React</span>
+                        <span class="bg-terminal-line px-3 py-2 sm:py-1 rounded glow-effect hover:bg-gray-800 transition text-center">Node.js</span>
+                        <span class="bg-terminal-line px-3 py-2 sm:py-1 rounded glow-effect hover:bg-gray-800 transition text-center">Python</span>
+                        <span class="bg-terminal-line px-3 py-2 sm:py-1 rounded glow-effect hover:bg-gray-800 transition text-center">SQL</span>
                     </div>
                 </div>`
             },
             projects: {
                 response: `<div class="space-y-3 px-1">
-                    <div class="border border-terminal-line p-3 rounded glow-effect hover:border-terminal-green transition">
+                    <div class="border border-terminal-line p-4 sm:p-3 rounded glow-effect hover:border-terminal-green transition active:bg-gray-900">
                         <p class="text-white text-sm sm:text-base">Terminal UI Portfolio</p>
                         <p class="text-xs sm:text-sm mt-1">An interactive terminal-style portfolio website</p>
                         <p class="text-xs mt-2 text-gray-500">HTML, CSS, JavaScript</p>
