@@ -52,19 +52,40 @@
         .glow-effect {
             box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
         }
+        /* Mobile touch improvements */
+        @media (max-width: 640px) {
+            .terminal-scroll {
+                -webkit-overflow-scrolling: touch;
+                scroll-behavior: smooth;
+            }
+            .glow-effect {
+                box-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
+            }
+            .command-response p {
+                line-height: 1.6;
+                margin-bottom: 0.5rem;
+            }
+        }
+        /* Improve command response spacing */
+        .command-response {
+            padding: 0.5rem 0;
+        }
+        .command-response p {
+            margin-bottom: 0.25rem;
+        }
     </style>
 </head>
 <body class="bg-terminal-bg text-terminal-green font-mono h-screen overflow-hidden flex flex-col">
     <div id="vanta-globe" class="absolute inset-0 pointer-events-none opacity-20"></div>
     
-    <div class="relative z-10 container mx-auto px-4 py-8 flex flex-col h-full">
+    <div class="relative z-10 container mx-auto px-2 sm:px-4 py-4 sm:py-8 flex flex-col h-full">
         <!-- Header -->
-        <div class="flex items-center justify-between mb-6 border-b border-terminal-line pb-4">
-            <div class="flex items-center space-x-3">
-                <i data-feather="terminal" class="text-terminal-green"></i>
-                <h1 class="text-xl terminal-text">root@dev-terminal:~</h1>
+        <div class="flex items-center justify-between mb-4 sm:mb-6 border-b border-terminal-line pb-3 sm:pb-4">
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                <i data-feather="terminal" class="text-terminal-green w-4 sm:w-5"></i>
+                <h1 class="text-lg sm:text-xl terminal-text">root@dev-terminal:~</h1>
             </div>
-            <div class="flex space-x-4">
+            <div class="flex space-x-3 sm:space-x-4">
                 <button class="hover:text-white transition-colors">
                     <i data-feather="minimize"></i>
                 </button>
@@ -79,9 +100,9 @@
 
         <!-- Terminal Body -->
         <div class="flex-grow overflow-y-auto mb-4 space-y-4 terminal-scroll">
-            <div class="flex items-start">
+            <div class="flex items-start px-1">
                 <span class="text-terminal-green mr-2">$</span>
-                <p class="terminal-text">Welcome to the interactive terminal UI. Type 'help' to see available commands.</p>
+                <p class="terminal-text text-sm sm:text-base">Welcome to the interactive terminal UI. Type 'help' to see available commands.</p>
             </div>
 
             <div id="command-history" class="space-y-4"></div>
@@ -90,7 +111,7 @@
                 <span class="text-terminal-green mr-2">$</span>
                 <div class="flex-1 flex items-center">
                     <input type="text" id="terminal-input" 
-                           class="terminal-input bg-transparent flex-1 caret-terminal-green text-terminal-green" 
+                           class="terminal-input bg-transparent flex-1 caret-terminal-green text-terminal-green text-sm sm:text-base w-full" 
                            autocomplete="off" 
                            autocorrect="off"
                            autocapitalize="off"
@@ -102,21 +123,22 @@
         </div>
 
         <!-- Footer -->
-        <div class="flex items-center justify-between text-sm text-gray-500 border-t border-terminal-line pt-3">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between text-xs sm:text-sm text-gray-500 border-t border-terminal-line pt-3 space-y-2 sm:space-y-0">
             <div class="flex items-center space-x-2">
-                <i data-feather="cpu" class="w-4 h-4"></i>
+                <i data-feather="cpu" class="w-3 sm:w-4 h-3 sm:h-4"></i>
                 <span>System: Online</span>
             </div>
-            <div class="flex items-center space-x-4">
+            <div class="flex items-center space-x-3 sm:space-x-4">
                 <span class="flex items-center">
-                    <i data-feather="wifi" class="w-4 h-4 mr-1"></i>
-                    <span>100%</span>
+                    <i data-feather="wifi" class="w-3 sm:w-4 h-3 sm:h-4 mr-1"></i>
+                    <span class="hidden sm:inline">100%</span>
+                    <span class="sm:hidden">WiFi</span>
                 </span>
                 <span class="flex items-center">
-                    <i data-feather="battery" class="w-4 h-4 mr-1"></i>
+                    <i data-feather="battery" class="w-3 sm:w-4 h-3 sm:h-4 mr-1"></i>
                     <span>87%</span>
                 </span>
-                <span id="current-time"></span>
+                <span id="current-time" class="text-xs sm:text-sm"></span>
             </div>
         </div>
     </div>
@@ -143,34 +165,34 @@
         // Terminal functionality
         const commands = {
             help: {
-                response: `<div class="space-y-2">
-                    <p>Available commands:</p>
-                    <p class="ml-4">- <span class="text-white">about</span>: Shows information about this project</p>
-                    <p class="ml-4">- <span class="text-white">contact</span>: Displays contact information</p>
-                    <p class="ml-4">- <span class="text-white">skills</span>: Lists technical skills</p>
-                    <p class="ml-4">- <span class="text-white">projects</span>: Shows recent projects</p>
-                    <p class="ml-4">- <span class="text-white">clear</span>: Clears the terminal</p>
-                    <p class="ml-4">- <span class="text-white">theme</span>: Toggles between light/dark mode</p>
+                response: `<div class="space-y-2 px-1">
+                    <p class="text-sm sm:text-base">Available commands:</p>
+                    <p class="ml-3 sm:ml-4 text-sm sm:text-base">- <span class="text-white">about</span>: Shows information about this project</p>
+                    <p class="ml-3 sm:ml-4 text-sm sm:text-base">- <span class="text-white">contact</span>: Displays contact information</p>
+                    <p class="ml-3 sm:ml-4 text-sm sm:text-base">- <span class="text-white">skills</span>: Lists technical skills</p>
+                    <p class="ml-3 sm:ml-4 text-sm sm:text-base">- <span class="text-white">projects</span>: Shows recent projects</p>
+                    <p class="ml-3 sm:ml-4 text-sm sm:text-base">- <span class="text-white">clear</span>: Clears the terminal</p>
+                    <p class="ml-3 sm:ml-4 text-sm sm:text-base">- <span class="text-white">theme</span>: Toggles between light/dark mode</p>
                 </div>`
             },
             about: {
-                response: `<div class="space-y-2">
-                    <p>Terminal UI Portfolio v1.0</p>
-                    <p>A unique developer portfolio that mimics a terminal interface for a sleek, tech-inspired look.</p>
-                    <p>Built using HTML, CSS, JavaScript, and TailwindCSS.</p>
+                response: `<div class="space-y-2 px-1">
+                    <p class="text-sm sm:text-base">Terminal UI Portfolio v1.0</p>
+                    <p class="text-sm sm:text-base">A unique developer portfolio that mimics a terminal interface for a sleek, tech-inspired look.</p>
+                    <p class="text-sm sm:text-base">Built using HTML, CSS, JavaScript, and TailwindCSS.</p>
                 </div>`
             },
             contact: {
-                response: `<div class="space-y-2">
-                    <p>You can reach me at:</p>
-                    <p class="ml-4">- Email: <span class="text-white">miadninezeo@gmail.com</span></p>
-                    <p class="ml-4">- Phone: <span class="text-white">+8801608229699</span></p>
+                response: `<div class="space-y-2 px-1">
+                    <p class="text-sm sm:text-base">You can reach me at:</p>
+                    <p class="ml-3 sm:ml-4 text-sm sm:text-base">- Email: <span class="text-white">miadninezeo@gmail.com</span></p>
+                    <p class="ml-3 sm:ml-4 text-sm sm:text-base">- Phone: <span class="text-white">+8801608229699</span></p>
                 </div>`
             },
             skills: {
-                response: `<div class="space-y-2">
-                    <p>Technical Skills:</p>
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-2 mt-2">
+                response: `<div class="space-y-2 px-1">
+                    <p class="text-sm sm:text-base">Technical Skills:</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mt-2">
                         <span class="bg-terminal-line px-3 py-1 rounded glow-effect hover:bg-gray-800 transition">JavaScript</span>
                         <span class="bg-terminal-line px-3 py-1 rounded glow-effect hover:bg-gray-800 transition">HTML/CSS</span>
                         <span class="bg-terminal-line px-3 py-1 rounded glow-effect hover:bg-gray-800 transition">React</span>
@@ -181,16 +203,16 @@
                 </div>`
             },
             projects: {
-                response: `<div class="space-y-3">
+                response: `<div class="space-y-3 px-1">
                     <div class="border border-terminal-line p-3 rounded glow-effect hover:border-terminal-green transition">
-                        <p class="text-white">Terminal UI Portfolio</p>
-                        <p class="text-sm mt-1">An interactive terminal-style portfolio website</p>
+                        <p class="text-white text-sm sm:text-base">Terminal UI Portfolio</p>
+                        <p class="text-xs sm:text-sm mt-1">An interactive terminal-style portfolio website</p>
                         <p class="text-xs mt-2 text-gray-500">HTML, CSS, JavaScript</p>
                     </div>
                 </div>`
             },
             theme: {
-                response: `<p>Toggling theme...</p>`,
+                response: `<p class="px-1 text-sm sm:text-base">Toggling theme...</p>`,
                 execute: () => {
                     document.documentElement.classList.toggle('dark');
                 }
@@ -238,7 +260,7 @@
                             commands[command].execute();
                         }
                     } else {
-                        responseElement.innerHTML = `<p class="text-red-500">Command not found: ${command}. Type 'help' for available commands.</p>`;
+                        responseElement.innerHTML = `<p class="text-red-500 px-1 text-sm sm:text-base">Command not found: ${command}. Type 'help' for available commands.</p>`;
                     }
                     
                     commandHistory.appendChild(responseElement);
