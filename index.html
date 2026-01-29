@@ -26,7 +26,6 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-    <script src="https://unpkg.com/feather-icons"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -152,15 +151,15 @@
                 <i data-feather="terminal" class="text-terminal-green w-5" aria-hidden="true"></i>
                 <h1 class="text-base sm:text-xl terminal-text truncate">root@dev-terminal:~</h1>
             </div>
-            <div class="flex space-x-3 sm:space-x-4" role="toolbar" aria-label="Window controls">
-                <button class="hover:text-white transition-colors p-2" aria-label="Minimize window">
-                    <i data-feather="minimize" class="w-4 sm:w-5" aria-hidden="true"></i>
+            <div class="flex space-x-3 sm:space-x-4" role="presentation" aria-hidden="true">
+                <button class="hover:text-white transition-colors p-2" tabindex="-1">
+                    <i data-feather="minimize" class="w-4 sm:w-5"></i>
                 </button>
-                <button class="hover:text-white transition-colors p-2" aria-label="Maximize window">
-                    <i data-feather="maximize" class="w-4 sm:w-5" aria-hidden="true"></i>
+                <button class="hover:text-white transition-colors p-2" tabindex="-1">
+                    <i data-feather="maximize" class="w-4 sm:w-5"></i>
                 </button>
-                <button class="hover:text-red-500 transition-colors p-2" aria-label="Close window">
-                    <i data-feather="x" class="w-4 sm:w-5" aria-hidden="true"></i>
+                <button class="hover:text-red-500 transition-colors p-2" tabindex="-1">
+                    <i data-feather="x" class="w-4 sm:w-5"></i>
                 </button>
             </div>
         </header>
@@ -218,24 +217,31 @@
         feather.replace();
         
         // Vanta.js background
-        VANTA.GLOBE({
-            el: "#vanta-globe",
-            mouseControls: true,
-            touchControls: true,
-            gyroControls: false,
-            minHeight: window.innerHeight,
-            minWidth: window.innerWidth,
-            scale: 1.00,
-            scaleMobile: 1.00,
-            color: 0x00ff00,
-            backgroundColor: 0x0a0a0a,
-            size: 1.0
-        });
+        let vantaEffect = null;
+        try {
+            if (typeof VANTA !== 'undefined' && VANTA.GLOBE) {
+                vantaEffect = VANTA.GLOBE({
+                    el: "#vanta-globe",
+                    mouseControls: true,
+                    touchControls: true,
+                    gyroControls: false,
+                    minHeight: window.innerHeight,
+                    minWidth: window.innerWidth,
+                    scale: 1.00,
+                    scaleMobile: 1.00,
+                    color: 0x00ff00,
+                    backgroundColor: 0x0a0a0a,
+                    size: 1.0
+                });
+            }
+        } catch (error) {
+            console.error('Failed to initialize Vanta.js:', error);
+        }
 
         // Update Vanta.js size on window resize
         window.addEventListener('resize', () => {
-            if (window.VANTA) {
-                window.VANTA.resize();
+            if (vantaEffect && typeof vantaEffect.resize === 'function') {
+                vantaEffect.resize();
             }
         });
 
@@ -279,7 +285,7 @@
             contact: {
                 response: `<div class="space-y-2 px-1">
                     <p class="text-sm sm:text-base">You can reach me at:</p>
-                    <p class="ml-3 sm:ml-4 text-sm sm:text-base">- Email: <a href="mailto:miadninezeo@gmail.com" class="text-white hover:underline">miadninezeo@gmail.com</a></p>
+                    <p class="ml-3 sm:ml-4 text-sm sm:text-base">- Email: <a href="mailto:miadninezero@gmail.com" class="text-white hover:underline">miadninezero@gmail.com</a></p>
                     <p class="ml-3 sm:ml-4 text-sm sm:text-base">- Phone: <a href="tel:+8801608229699" class="text-white hover:underline">+880 1608-229699</a></p>
                     <p class="text-sm sm:text-base mt-2">Feel free to reach out for collaborations, questions, or just to say hi! 👋</p>
                 </div>`
@@ -343,6 +349,7 @@
         const suggestionElement = document.getElementById('suggestion');
         
         // Command history for arrow key navigation
+        const MAX_HISTORY_LENGTH = 100;
         let commandHistoryArray = [];
         let historyIndex = -1;
         
@@ -435,18 +442,25 @@
                 updateSuggestion('');
                 
                 if (command) {
-                    // Add to history
+                    // Add to history with max length limit
                     commandHistoryArray.push(command);
+                    if (commandHistoryArray.length > MAX_HISTORY_LENGTH) {
+                        commandHistoryArray.shift();
+                    }
                     historyIndex = -1;
                 }
                 
                 // Add command to display history
                 const commandElement = document.createElement('div');
                 commandElement.className = 'flex items-start animate-fade-in';
-                commandElement.innerHTML = `
-                    <span class="text-terminal-green mr-2">$</span>
-                    <p class="terminal-text">${command}</p>
-                `;
+                const commandText = document.createElement('p');
+                commandText.className = 'terminal-text';
+                commandText.textContent = command;
+                const promptSpan = document.createElement('span');
+                promptSpan.className = 'text-terminal-green mr-2';
+                promptSpan.textContent = '$';
+                commandElement.appendChild(promptSpan);
+                commandElement.appendChild(commandText);
                 commandHistory.appendChild(commandElement);
                 
                 // Process command
@@ -496,13 +510,11 @@
 
         // Focus input on page load and clicks
         terminalInput.focus();
-        document.addEventListener('click', () => {
-            terminalInput.focus();
-        });
-        
-        // Prevent input blur on mobile
-        terminalInput.addEventListener('blur', () => {
-            setTimeout(() => terminalInput.focus(), 0);
+        document.addEventListener('click', (e) => {
+            // Don't refocus if clicking on a link or interactive element
+            if (!e.target.closest('a, button')) {
+                terminalInput.focus();
+            }
         });
     </script>
 </body>
