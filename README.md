@@ -3,10 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terminal UI</title>
+    
+    <!-- SEO Meta Tags -->
+    <title>Miad Nine Zero - Developer Portfolio | Terminal UI</title>
+    <meta name="description" content="Interactive terminal-style portfolio of Miad Nine Zero, showcasing web development skills in JavaScript, HTML, CSS, React, Node.js, Python and more.">
+    <meta name="keywords" content="portfolio, web developer, terminal UI, JavaScript, React, Node.js, Python, HTML, CSS, web design">
+    <meta name="author" content="Miad Nine Zero">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Miad Nine Zero - Developer Portfolio">
+    <meta property="og:description" content="Interactive terminal-style portfolio showcasing web development skills and projects.">
+    <meta property="og:url" content="https://miadninezero.github.io">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Miad Nine Zero - Developer Portfolio">
+    <meta name="twitter:description" content="Interactive terminal-style portfolio showcasing web development skills and projects.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💻</text></svg>">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-    <script src="https://unpkg.com/feather-icons"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -22,11 +41,16 @@
                     },
                     animation: {
                         'cursor-blink': 'cursor-blink 1s infinite',
+                        'fade-in': 'fade-in 0.3s ease-in',
                     },
                     keyframes: {
                         'cursor-blink': {
                             '0%, 100%': { opacity: '1' },
                             '50%': { opacity: '0' },
+                        },
+                        'fade-in': {
+                            '0%': { opacity: '0', transform: 'translateY(-10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
                         }
                     }
                 }
@@ -58,6 +82,11 @@
         }
         .glow-effect {
             box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+        /* Command suggestions */
+        .command-suggestion {
+            color: #666;
+            pointer-events: none;
         }
         /* Mobile touch improvements */
         @media (max-width: 640px) {
@@ -101,74 +130,86 @@
         .command-response p {
             margin-bottom: 0.25rem;
         }
+        /* Link styling */
+        a {
+            color: #00ff00;
+            text-decoration: underline;
+            transition: color 0.2s;
+        }
+        a:hover {
+            color: #00cc00;
+        }
     </style>
 </head>
 <body class="bg-terminal-bg text-terminal-green font-mono h-screen min-h-screen w-screen overflow-hidden flex flex-col">
-    <div id="vanta-globe" class="fixed inset-0 pointer-events-none opacity-20"></div>
+    <div id="vanta-globe" class="fixed inset-0 pointer-events-none opacity-20" role="presentation" aria-hidden="true"></div>
     
     <div class="relative z-10 w-full h-full px-3 sm:px-4 py-3 sm:py-8 flex flex-col">
         <!-- Header -->
-        <div class="flex items-center justify-between mb-3 sm:mb-6 border-b border-terminal-line pb-2 sm:pb-4">
+        <header class="flex items-center justify-between mb-3 sm:mb-6 border-b border-terminal-line pb-2 sm:pb-4">
             <div class="flex items-center space-x-2 sm:space-x-3">
-                <i data-feather="terminal" class="text-terminal-green w-5"></i>
+                <i data-feather="terminal" class="text-terminal-green w-5" aria-hidden="true"></i>
                 <h1 class="text-base sm:text-xl terminal-text truncate">root@dev-terminal:~</h1>
             </div>
-            <div class="flex space-x-3 sm:space-x-4">
-                <button class="hover:text-white transition-colors p-2">
+            <div class="flex space-x-3 sm:space-x-4" role="presentation" aria-hidden="true">
+                <button class="hover:text-white transition-colors p-2" tabindex="-1">
                     <i data-feather="minimize" class="w-4 sm:w-5"></i>
                 </button>
-                <button class="hover:text-white transition-colors p-2">
+                <button class="hover:text-white transition-colors p-2" tabindex="-1">
                     <i data-feather="maximize" class="w-4 sm:w-5"></i>
                 </button>
-                <button class="hover:text-red-500 transition-colors p-2">
+                <button class="hover:text-red-500 transition-colors p-2" tabindex="-1">
                     <i data-feather="x" class="w-4 sm:w-5"></i>
                 </button>
             </div>
-        </div>
+        </header>
 
         <!-- Terminal Body -->
-        <div class="flex-grow overflow-y-auto mb-4 space-y-4 terminal-scroll">
+        <main class="flex-grow overflow-y-auto mb-4 space-y-4 terminal-scroll" role="log" aria-live="polite" aria-label="Terminal output">
             <div class="flex items-start px-1">
-                <span class="text-terminal-green mr-2">$</span>
+                <span class="text-terminal-green mr-2" aria-hidden="true">$</span>
                 <p class="terminal-text text-sm sm:text-base">Welcome to the interactive terminal UI. Type 'help' to see available commands.</p>
             </div>
 
             <div id="command-history" class="space-y-4"></div>
 
             <div class="flex items-start">
-                <span class="text-terminal-green mr-2">$</span>
-                <div class="flex-1 flex items-center">
+                <span class="text-terminal-green mr-2" aria-hidden="true">$</span>
+                <div class="flex-1 flex items-center relative">
                     <input type="text" id="terminal-input" 
                            class="terminal-input bg-transparent flex-1 caret-terminal-green text-terminal-green text-sm sm:text-base w-full" 
                            autocomplete="off" 
                            autocorrect="off"
                            autocapitalize="off"
                            spellcheck="false"
-                           placeholder="Type a command...">
-                    <span id="cursor" class="ml-1 bg-terminal-green w-3 h-6 inline-block animate-cursor-blink"></span>
+                           placeholder="Type a command..."
+                           aria-label="Terminal command input"
+                           role="textbox">
+                    <span id="suggestion" class="command-suggestion absolute left-0 text-sm sm:text-base pointer-events-none"></span>
+                    <span id="cursor" class="ml-1 bg-terminal-green w-3 h-6 inline-block animate-cursor-blink" aria-hidden="true"></span>
                 </div>
             </div>
-        </div>
+        </main>
 
         <!-- Footer -->
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between text-xs sm:text-sm text-gray-500 border-t border-terminal-line pt-2 sm:pt-3 space-y-2 sm:space-y-0 pb-safe">
+        <footer class="flex flex-col sm:flex-row items-start sm:items-center justify-between text-xs sm:text-sm text-gray-500 border-t border-terminal-line pt-2 sm:pt-3 space-y-2 sm:space-y-0 pb-safe">
             <div class="flex items-center space-x-2">
-                <i data-feather="cpu" class="w-3 sm:w-4 h-3 sm:h-4"></i>
+                <i data-feather="cpu" class="w-3 sm:w-4 h-3 sm:h-4" aria-hidden="true"></i>
                 <span>System: Online</span>
             </div>
             <div class="flex items-center space-x-3 sm:space-x-4">
-                <span class="flex items-center">
-                    <i data-feather="wifi" class="w-3 sm:w-4 h-3 sm:h-4 mr-1"></i>
+                <span class="flex items-center" aria-label="Network status">
+                    <i data-feather="wifi" class="w-3 sm:w-4 h-3 sm:h-4 mr-1" aria-hidden="true"></i>
                     <span class="hidden sm:inline">100%</span>
                     <span class="sm:hidden">WiFi</span>
                 </span>
-                <span class="flex items-center">
-                    <i data-feather="battery" class="w-3 sm:w-4 h-3 sm:h-4 mr-1"></i>
+                <span class="flex items-center" aria-label="Battery status">
+                    <i data-feather="battery" class="w-3 sm:w-4 h-3 sm:h-4 mr-1" aria-hidden="true"></i>
                     <span>87%</span>
                 </span>
-                <span id="current-time" class="text-xs sm:text-sm"></span>
+                <time id="current-time" class="text-xs sm:text-sm" aria-label="Current time"></time>
             </div>
-        </div>
+        </footer>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"></script>
@@ -176,24 +217,31 @@
         feather.replace();
         
         // Vanta.js background
-        VANTA.GLOBE({
-            el: "#vanta-globe",
-            mouseControls: true,
-            touchControls: true,
-            gyroControls: false,
-            minHeight: window.innerHeight,
-            minWidth: window.innerWidth,
-            scale: 1.00,
-            scaleMobile: 1.00,
-            color: 0x00ff00,
-            backgroundColor: 0x0a0a0a,
-            size: 1.0
-        });
+        let vantaEffect = null;
+        try {
+            if (typeof VANTA !== 'undefined' && VANTA.GLOBE) {
+                vantaEffect = VANTA.GLOBE({
+                    el: "#vanta-globe",
+                    mouseControls: true,
+                    touchControls: true,
+                    gyroControls: false,
+                    minHeight: window.innerHeight,
+                    minWidth: window.innerWidth,
+                    scale: 1.00,
+                    scaleMobile: 1.00,
+                    color: 0x00ff00,
+                    backgroundColor: 0x0a0a0a,
+                    size: 1.0
+                });
+            }
+        } catch (error) {
+            console.error('Failed to initialize Vanta.js:', error);
+        }
 
         // Update Vanta.js size on window resize
         window.addEventListener('resize', () => {
-            if (window.VANTA) {
-                window.VANTA.resize();
+            if (vantaEffect && typeof vantaEffect.resize === 'function') {
+                vantaEffect.resize();
             }
         });
 
@@ -202,38 +250,59 @@
             help: {
                 response: `<div class="space-y-2 px-1">
                     <p class="text-sm sm:text-base">Available commands:</p>
+                    <p class="ml-3 sm:ml-4 text-sm sm:text-base">- <span class="text-white">whoami</span>: Personal introduction</p>
                     <p class="ml-3 sm:ml-4 text-sm sm:text-base">- <span class="text-white">about</span>: Shows information about this project</p>
                     <p class="ml-3 sm:ml-4 text-sm sm:text-base">- <span class="text-white">contact</span>: Displays contact information</p>
                     <p class="ml-3 sm:ml-4 text-sm sm:text-base">- <span class="text-white">skills</span>: Lists technical skills</p>
                     <p class="ml-3 sm:ml-4 text-sm sm:text-base">- <span class="text-white">projects</span>: Shows recent projects</p>
+                    <p class="ml-3 sm:ml-4 text-sm sm:text-base">- <span class="text-white">social</span>: Social media and professional links</p>
+                    <p class="ml-3 sm:ml-4 text-sm sm:text-base">- <span class="text-white">shortcuts</span>: Keyboard shortcuts guide</p>
                     <p class="ml-3 sm:ml-4 text-sm sm:text-base">- <span class="text-white">clear</span>: Clears the terminal</p>
                     <p class="ml-3 sm:ml-4 text-sm sm:text-base">- <span class="text-white">theme</span>: Toggles between light/dark mode</p>
                 </div>`
             },
+            whoami: {
+                response: `<div class="space-y-2 px-1">
+                    <p class="text-sm sm:text-base text-white">Miad Nine Zero</p>
+                    <p class="text-sm sm:text-base">Full-Stack Developer | Tech Enthusiast | Problem Solver</p>
+                    <p class="text-sm sm:text-base mt-2">I'm passionate about creating elegant solutions to complex problems. With expertise in modern web technologies, I build responsive, user-friendly applications that make a difference.</p>
+                    <p class="text-sm sm:text-base mt-2">When I'm not coding, you'll find me exploring new technologies, contributing to open source, or sharing knowledge with the developer community.</p>
+                </div>`
+            },
             about: {
                 response: `<div class="space-y-2 px-1">
-                    <p class="text-sm sm:text-base">Terminal UI Portfolio v1.0</p>
+                    <p class="text-sm sm:text-base">Terminal UI Portfolio v2.0</p>
                     <p class="text-sm sm:text-base">A unique developer portfolio that mimics a terminal interface for a sleek, tech-inspired look.</p>
-                    <p class="text-sm sm:text-base">Built using HTML, CSS, JavaScript, and TailwindCSS.</p>
+                    <p class="text-sm sm:text-base">Built using HTML, CSS, JavaScript, and TailwindCSS with Vanta.js for 3D graphics.</p>
+                    <p class="text-sm sm:text-base mt-2">Features:</p>
+                    <p class="ml-3 sm:ml-4 text-sm sm:text-base">✓ Interactive command-line interface</p>
+                    <p class="ml-3 sm:ml-4 text-sm sm:text-base">✓ Command history with arrow key navigation</p>
+                    <p class="ml-3 sm:ml-4 text-sm sm:text-base">✓ Tab completion for commands</p>
+                    <p class="ml-3 sm:ml-4 text-sm sm:text-base">✓ Responsive design for all devices</p>
+                    <p class="ml-3 sm:ml-4 text-sm sm:text-base">✓ 3D globe background animation</p>
                 </div>`
             },
             contact: {
                 response: `<div class="space-y-2 px-1">
                     <p class="text-sm sm:text-base">You can reach me at:</p>
-                    <p class="ml-3 sm:ml-4 text-sm sm:text-base">- Email: <span class="text-white">miadninezeo@gmail.com</span></p>
-                    <p class="ml-3 sm:ml-4 text-sm sm:text-base">- Phone: <span class="text-white">+8801608229699</span></p>
+                    <p class="ml-3 sm:ml-4 text-sm sm:text-base">- Email: <a href="mailto:miadninezero@gmail.com" class="text-white hover:underline">miadninezero@gmail.com</a></p>
+                    <p class="ml-3 sm:ml-4 text-sm sm:text-base">- Phone: <a href="tel:+8801608229699" class="text-white hover:underline">+880 1608-229699</a></p>
+                    <p class="text-sm sm:text-base mt-2">Feel free to reach out for collaborations, questions, or just to say hi! 👋</p>
                 </div>`
             },
             skills: {
                 response: `<div class="space-y-2 px-1">
                     <p class="text-sm sm:text-base">Technical Skills:</p>
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mt-2">
-                        <span class="bg-terminal-line px-3 py-2 sm:py-1 rounded glow-effect hover:bg-gray-800 transition text-center">JavaScript</span>
-                        <span class="bg-terminal-line px-3 py-2 sm:py-1 rounded glow-effect hover:bg-gray-800 transition text-center">HTML/CSS</span>
-                        <span class="bg-terminal-line px-3 py-2 sm:py-1 rounded glow-effect hover:bg-gray-800 transition text-center">React</span>
-                        <span class="bg-terminal-line px-3 py-2 sm:py-1 rounded glow-effect hover:bg-gray-800 transition text-center">Node.js</span>
-                        <span class="bg-terminal-line px-3 py-2 sm:py-1 rounded glow-effect hover:bg-gray-800 transition text-center">Python</span>
-                        <span class="bg-terminal-line px-3 py-2 sm:py-1 rounded glow-effect hover:bg-gray-800 transition text-center">SQL</span>
+                        <span class="bg-terminal-line px-3 py-2 sm:py-1 rounded glow-effect hover:bg-gray-800 transition text-center cursor-default">JavaScript</span>
+                        <span class="bg-terminal-line px-3 py-2 sm:py-1 rounded glow-effect hover:bg-gray-800 transition text-center cursor-default">HTML/CSS</span>
+                        <span class="bg-terminal-line px-3 py-2 sm:py-1 rounded glow-effect hover:bg-gray-800 transition text-center cursor-default">React</span>
+                        <span class="bg-terminal-line px-3 py-2 sm:py-1 rounded glow-effect hover:bg-gray-800 transition text-center cursor-default">Node.js</span>
+                        <span class="bg-terminal-line px-3 py-2 sm:py-1 rounded glow-effect hover:bg-gray-800 transition text-center cursor-default">Python</span>
+                        <span class="bg-terminal-line px-3 py-2 sm:py-1 rounded glow-effect hover:bg-gray-800 transition text-center cursor-default">SQL</span>
+                        <span class="bg-terminal-line px-3 py-2 sm:py-1 rounded glow-effect hover:bg-gray-800 transition text-center cursor-default">Git</span>
+                        <span class="bg-terminal-line px-3 py-2 sm:py-1 rounded glow-effect hover:bg-gray-800 transition text-center cursor-default">TailwindCSS</span>
+                        <span class="bg-terminal-line px-3 py-2 sm:py-1 rounded glow-effect hover:bg-gray-800 transition text-center cursor-default">REST APIs</span>
                     </div>
                 </div>`
             },
@@ -241,9 +310,30 @@
                 response: `<div class="space-y-3 px-1">
                     <div class="border border-terminal-line p-4 sm:p-3 rounded glow-effect hover:border-terminal-green transition active:bg-gray-900">
                         <p class="text-white text-sm sm:text-base">Terminal UI Portfolio</p>
-                        <p class="text-xs sm:text-sm mt-1">An interactive terminal-style portfolio website</p>
-                        <p class="text-xs mt-2 text-gray-500">HTML, CSS, JavaScript</p>
+                        <p class="text-xs sm:text-sm mt-1">An interactive terminal-style portfolio website with 3D graphics and modern design</p>
+                        <p class="text-xs mt-2 text-gray-500">HTML, CSS, JavaScript, TailwindCSS, Vanta.js</p>
+                        <a href="https://miadninezero.github.io" target="_blank" rel="noopener noreferrer" class="text-xs mt-2 inline-block">🔗 View Live</a>
                     </div>
+                    <p class="text-xs sm:text-sm text-gray-500 mt-2">More projects coming soon...</p>
+                </div>`
+            },
+            social: {
+                response: `<div class="space-y-2 px-1">
+                    <p class="text-sm sm:text-base">Connect with me:</p>
+                    <p class="ml-3 sm:ml-4 text-sm sm:text-base">- <a href="https://github.com/miadninezero" target="_blank" rel="noopener noreferrer">GitHub</a> <span class="text-gray-500">@miadninezero</span></p>
+                    <p class="ml-3 sm:ml-4 text-sm sm:text-base">- <a href="https://linkedin.com/in/miadninezero" target="_blank" rel="noopener noreferrer">LinkedIn</a> <span class="text-gray-500">Miad Nine Zero</span></p>
+                    <p class="ml-3 sm:ml-4 text-sm sm:text-base">- <a href="https://twitter.com/miadninezero" target="_blank" rel="noopener noreferrer">Twitter/X</a> <span class="text-gray-500">@miadninezero</span></p>
+                    <p class="text-sm sm:text-base mt-2">Let's connect and build something amazing together! 🚀</p>
+                </div>`
+            },
+            shortcuts: {
+                response: `<div class="space-y-2 px-1">
+                    <p class="text-sm sm:text-base">Keyboard Shortcuts:</p>
+                    <p class="ml-3 sm:ml-4 text-sm sm:text-base">- <span class="text-white">Tab</span>: Auto-complete command</p>
+                    <p class="ml-3 sm:ml-4 text-sm sm:text-base">- <span class="text-white">↑/↓</span>: Navigate command history</p>
+                    <p class="ml-3 sm:ml-4 text-sm sm:text-base">- <span class="text-white">Enter</span>: Execute command</p>
+                    <p class="ml-3 sm:ml-4 text-sm sm:text-base">- <span class="text-white">Ctrl+L</span>: Clear terminal (or type 'clear')</p>
+                    <p class="text-sm sm:text-base mt-2">Tip: Start typing a command and press Tab to auto-complete!</p>
                 </div>`
             },
             theme: {
@@ -256,6 +346,12 @@
 
         const terminalInput = document.getElementById('terminal-input');
         const commandHistory = document.getElementById('command-history');
+        const suggestionElement = document.getElementById('suggestion');
+        
+        // Command history for arrow key navigation
+        const MAX_HISTORY_LENGTH = 100;
+        let commandHistoryArray = [];
+        let historyIndex = -1;
         
         function updateTime() {
             const now = new Date();
@@ -265,24 +361,112 @@
         setInterval(updateTime, 1000);
         updateTime();
 
+        // Command suggestion
+        function updateSuggestion(input) {
+            if (!input) {
+                suggestionElement.textContent = '';
+                return;
+            }
+            
+            const matchingCommand = Object.keys(commands).find(cmd => 
+                cmd.startsWith(input.toLowerCase()) && cmd !== input.toLowerCase()
+            );
+            
+            if (matchingCommand) {
+                suggestionElement.textContent = input + matchingCommand.substring(input.length);
+            } else {
+                suggestionElement.textContent = '';
+            }
+        }
+
+        // Tab completion
+        function handleTabCompletion(input) {
+            const matchingCommand = Object.keys(commands).find(cmd => 
+                cmd.startsWith(input.toLowerCase())
+            );
+            
+            if (matchingCommand) {
+                terminalInput.value = matchingCommand;
+                updateSuggestion('');
+            }
+        }
+
+        // Input event for live suggestions
+        terminalInput.addEventListener('input', (e) => {
+            updateSuggestion(e.target.value);
+        });
+
         terminalInput.addEventListener('keydown', (e) => {
+            // Tab completion
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                handleTabCompletion(terminalInput.value);
+                return;
+            }
+            
+            // Arrow key navigation
+            if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (commandHistoryArray.length > 0 && historyIndex < commandHistoryArray.length - 1) {
+                    historyIndex++;
+                    terminalInput.value = commandHistoryArray[commandHistoryArray.length - 1 - historyIndex];
+                    updateSuggestion('');
+                }
+                return;
+            }
+            
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (historyIndex > 0) {
+                    historyIndex--;
+                    terminalInput.value = commandHistoryArray[commandHistoryArray.length - 1 - historyIndex];
+                    updateSuggestion('');
+                } else if (historyIndex === 0) {
+                    historyIndex = -1;
+                    terminalInput.value = '';
+                    updateSuggestion('');
+                }
+                return;
+            }
+            
+            // Ctrl+L to clear
+            if (e.ctrlKey && e.key === 'l') {
+                e.preventDefault();
+                commandHistory.innerHTML = '';
+                return;
+            }
+            
             if (e.key === 'Enter') {
                 const command = terminalInput.value.trim().toLowerCase();
                 terminalInput.value = '';
+                updateSuggestion('');
                 
-                // Add command to history
+                if (command) {
+                    // Add to history with max length limit
+                    commandHistoryArray.push(command);
+                    if (commandHistoryArray.length > MAX_HISTORY_LENGTH) {
+                        commandHistoryArray.shift();
+                    }
+                    historyIndex = -1;
+                }
+                
+                // Add command to display history
                 const commandElement = document.createElement('div');
-                commandElement.className = 'flex items-start';
-                commandElement.innerHTML = `
-                    <span class="text-terminal-green mr-2">$</span>
-                    <p class="terminal-text">${command}</p>
-                `;
+                commandElement.className = 'flex items-start animate-fade-in';
+                const commandText = document.createElement('p');
+                commandText.className = 'terminal-text';
+                commandText.textContent = command;
+                const promptSpan = document.createElement('span');
+                promptSpan.className = 'text-terminal-green mr-2';
+                promptSpan.textContent = '$';
+                commandElement.appendChild(promptSpan);
+                commandElement.appendChild(commandText);
                 commandHistory.appendChild(commandElement);
                 
                 // Process command
                 setTimeout(() => {
                     const responseElement = document.createElement('div');
-                    responseElement.className = 'command-response';
+                    responseElement.className = 'command-response animate-fade-in';
                     
                     if (command === 'clear') {
                         commandHistory.innerHTML = '';
@@ -294,8 +478,22 @@
                         if (commands[command].execute) {
                             commands[command].execute();
                         }
-                    } else {
-                        responseElement.innerHTML = `<p class="text-red-500 px-1 text-sm sm:text-base">Command not found: ${command}. Type 'help' for available commands.</p>`;
+                    } else if (command) {
+                        // Find similar commands
+                        const similarCommands = Object.keys(commands).filter(cmd => 
+                            cmd.includes(command) || command.includes(cmd)
+                        );
+                        
+                        let suggestion = '';
+                        if (similarCommands.length > 0) {
+                            suggestion = `<p class="text-xs mt-1 text-gray-400">Did you mean: ${similarCommands.join(', ')}?</p>`;
+                        }
+                        
+                        responseElement.innerHTML = `
+                            <p class="text-red-500 px-1 text-sm sm:text-base">Command not found: ${command}</p>
+                            ${suggestion}
+                            <p class="text-xs mt-1 text-gray-400 px-1">Type 'help' for available commands.</p>
+                        `;
                     }
                     
                     commandHistory.appendChild(responseElement);
@@ -304,15 +502,19 @@
                     }, 10);
                     
                     // Scroll to bottom
-                    document.querySelector('.terminal-scroll').scrollTop = document.querySelector('.terminal-scroll').scrollHeight;
+                    const terminalScroll = document.querySelector('.terminal-scroll');
+                    terminalScroll.scrollTop = terminalScroll.scrollHeight;
                 }, 100);
             }
         });
 
         // Focus input on page load and clicks
         terminalInput.focus();
-        document.addEventListener('click', () => {
-            terminalInput.focus();
+        document.addEventListener('click', (e) => {
+            // Don't refocus if clicking on a link or interactive element
+            if (!e.target.closest('a, button')) {
+                terminalInput.focus();
+            }
         });
     </script>
 </body>
