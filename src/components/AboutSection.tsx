@@ -2,7 +2,7 @@ import { ScrollReveal } from "@/hooks/use-scroll-animation";
 
 const AboutSection = () => {
   return (
-    <section id="about" className="relative bg-grid py-32 overflow-hidden">
+    <section id="about" className="relative bg-grid py-20 overflow-hidden">
       <div className="px-8 md:px-16 max-w-5xl">
         <ScrollReveal>
           <p className="font-display uppercase text-hero-sub font-bold text-foreground leading-tight">
@@ -13,7 +13,7 @@ const AboutSection = () => {
           </p>
         </ScrollReveal>
         <ScrollReveal delay={0.15}>
-          <p className="mt-12 font-body text-lg md:text-xl text-muted-foreground max-w-2xl leading-relaxed">
+          <p className="mt-6 font-body text-lg md:text-xl text-muted-foreground max-w-2xl leading-relaxed">
             I build things with AI just for fun — like I'm experimenting with ideas in my own
             little world, trying to turn curiosity into creations.
           </p>

@@ -3,7 +3,7 @@ import { ScrollReveal } from "@/hooks/use-scroll-animation";
 
 const ContactSection = () => {
   return (
-    <section id="contact" className="relative bg-grid py-32 overflow-hidden">
+    <section id="contact" className="relative bg-grid py-20 overflow-hidden">
       {/* Decorative circles */}
       <div className="absolute right-[10%] top-1/2 -translate-y-1/2 w-[500px] h-[500px] opacity-[0.04]">
         <div className="absolute inset-0 rounded-full border border-foreground" />
@@ -18,14 +18,14 @@ const ContactSection = () => {
           </h2>
         </ScrollReveal>
         <ScrollReveal delay={0.1}>
-          <p className="mt-6 font-body text-muted-foreground text-lg max-w-lg mx-auto">
+          <p className="mt-4 font-body text-muted-foreground text-lg max-w-lg mx-auto">
             This website is just a small space I built for fun — shaped with curiosity, AI,
             and a bit of imagination.
           </p>
         </ScrollReveal>
 
         <ScrollReveal delay={0.2}>
-          <div className="mt-16 flex flex-col sm:flex-row items-center justify-center gap-6">
+          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-6">
             <a
               href="mailto:miadninezero@gmail.com"
               className="flex items-center gap-3 bg-primary text-primary-foreground font-display text-sm font-bold uppercase tracking-wider px-8 py-4 rounded-full hover:brightness-110 transition-all"
@@ -37,7 +37,7 @@ const ContactSection = () => {
         </ScrollReveal>
 
         <ScrollReveal delay={0.3}>
-          <div className="mt-16 flex items-center justify-center gap-8">
+          <div className="mt-10 flex items-center justify-center gap-8">
             <a
               href="mailto:miadninezero@gmail.com"
               className="text-muted-foreground hover:text-primary transition-colors"

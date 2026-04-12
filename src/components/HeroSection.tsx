@@ -11,16 +11,16 @@ const HeroSection = () => {
         <div className="absolute inset-24 rounded-full border border-foreground" />
       </div>
 
-      <div className="relative z-10 w-full px-8 md:px-16 pt-32">
+      <div className="relative z-10 w-full px-8 md:px-16 pt-24">
         <div className="flex flex-col">
-          <h1 className="font-display font-black uppercase text-massive text-foreground">
+          <h1 className="font-display font-black uppercase text-massive text-foreground leading-none">
             BUILT FOR
           </h1>
-          <div className="flex items-end gap-8 flex-wrap">
-            <h1 className="font-display font-black uppercase text-massive text-foreground">
+          <div className="flex items-end gap-6 flex-wrap">
+            <h1 className="font-display font-black uppercase text-massive text-foreground leading-none">
               CURIOSITY
             </h1>
-            <div className="hidden lg:block mb-4 w-[280px] h-[360px] rounded-lg overflow-hidden flex-shrink-0">
+            <div className="hidden lg:block mb-3 w-[240px] h-[310px] rounded-lg overflow-hidden flex-shrink-0">
               <img
                 src={heroImage}
                 alt="Miad portrait"
