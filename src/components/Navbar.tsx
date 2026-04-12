@@ -1,6 +1,6 @@
 const Navbar = () => {
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 md:px-16 py-6">
+    <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 md:px-16 py-6 backdrop-blur-md bg-background/60">
       <div className="font-display text-foreground text-xl font-bold uppercase tracking-wider">
         <span className="text-primary">M</span>IAD
       </div>
