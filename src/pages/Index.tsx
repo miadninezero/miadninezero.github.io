@@ -5,12 +5,15 @@ import SkillsSection from "@/components/SkillsSection";
 import ProjectsSection from "@/components/ProjectsSection";
 import EnthusiastSection from "@/components/EnthusiastSection";
 import PersonalitySection from "@/components/PersonalitySection";
+import GamesSection from "@/components/GamesSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
+import AmbientBackground from "@/components/AmbientBackground";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative z-10 transition-all">
+      <AmbientBackground />
       <Navbar />
       <HeroSection />
       <AboutSection />
@@ -18,6 +21,7 @@ const Index = () => {
       <ProjectsSection />
       <EnthusiastSection />
       <PersonalitySection />
+      <GamesSection />
       <ContactSection />
       <Footer />
     </div>
